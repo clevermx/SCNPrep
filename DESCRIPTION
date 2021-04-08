@@ -1,0 +1,26 @@
+Package: SCNPrep
+Type: Package
+Title: Preparing Seurat object for use in scNavigator
+Version: 0.9.9
+Author: Konstantin Zaitsev <kzaitsev@itmo.ru>
+Maintainer: Konstantin Zaitsev <kzaitsev@itmo.ru>
+Description: Utility function for converting scRNA-seq data from Seurat to json files required for scNavigator
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Depends: 
+    R (>= 3.6)
+Imports: 
+    magrittr,
+    dplyr,
+    Seurat,
+    MASS,
+    Matrix,
+    reshape2,
+    alphahull,
+    data.table,
+    igraph,
+    jsonlite,
+    rhdf5,
+    stringi
