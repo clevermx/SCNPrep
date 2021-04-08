@@ -5,7 +5,7 @@
 To install the package use 
 
 ```r
-devtools::install_github("ctlab/SCEPrep")
+devtools::install_github("ctlab/SCNPrep")
 ```
 
 ## Usage
