@@ -22,6 +22,11 @@ jobs:
         r-version: [3.5, 3.6, 4.0]
 
     steps:
+      - uses: actions/checkout@master
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v1
+        with:
+          r-version: ${{ matrix.R }}
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
