@@ -54,7 +54,7 @@ writeH5ExpressionData <- function(counts, newH5File) {
 
   return(list(
     "expType"=unbox(asIs),
-    "genes"=rownames(counts),
+    "features"=rownames(counts),
     "barcodes"=colnames(counts),
     "totalCounts"=colSums(counts)
   ))
