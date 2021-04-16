@@ -1,5 +1,11 @@
 # SCNPrep
 
+![Badge](https://github.com/ctlab/SCNPrep/actions/workflows/r.yml/badge.svg)
+
+SCNPrep is an R package to convert Seurat object into Single-cell Navigator compatible json files.
+
+For full documentation of json files, please, refer to https://artyomovlab.wustl.edu/scn/docs/docs/.
+
 ## Installation
 
 To install the package use 
