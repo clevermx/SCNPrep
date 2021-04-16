@@ -11,8 +11,6 @@ LazyData: true
 RoxygenNote: 7.1.1
 Depends: 
     R (>= 3.5)
-biocViews:
-    rhdf5
 Imports: 
     magrittr,
     dplyr,
@@ -24,4 +22,5 @@ Imports:
     data.table,
     igraph,
     jsonlite,
-    stringi
+    stringi,
+    rhdf5
