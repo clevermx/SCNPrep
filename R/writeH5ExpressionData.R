@@ -52,8 +52,10 @@ writeH5ExpressionData <- function(counts, newH5File) {
 
   message(sprintf("%s - generated", newH5File))
 
+  expType <- if (asIs) "as_is" else "counts"
+
   return(list(
-    "expType"=unbox(asIs),
+    "expType"=unbox(expType),
     "features"=rownames(counts),
     "barcodes"=colnames(counts),
     "totalCounts"=colSums(counts)
