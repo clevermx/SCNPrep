@@ -31,6 +31,8 @@ jobs:
         run: sudo apt-get install libcurl4-openssl-dev
       - name: Install dependencies
         run: |
+          if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+          BiocManager::install("rhdf5")
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
