@@ -58,7 +58,8 @@ migrateSeuratObject <- function(
   generateMarkers=F,
   generateGMTS=public && (!is.null(markers) || generateMarkers),
   ## TODO: implement this maxReductionDims, PLEASE
-  maxReductionDims=10
+  maxReductionDims=10,
+  maxCellsPerIdent=200
 ) {
 
   ## Argument checkers
@@ -127,7 +128,7 @@ migrateSeuratObject <- function(
   } else {
     if (generateMarkers) {
       markers <- FindAllMarkers(
-        object, assay=assay, slot=slot, only.pos=T
+        object, assay=assay, slot=slot, only.pos=T, max.cells.per.ident=maxCellsPerIdent
       )
       mmarkers <- list("markers"=markers)
       totalMarkers <- generateMarkers(mmarkers, "markers")
