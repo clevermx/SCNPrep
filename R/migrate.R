@@ -58,7 +58,7 @@ migrateSeuratObject <- function(
   generateMarkers=F,
   generateGMTS=public && (!is.null(markers) || generateMarkers),
   ## TODO: implement this maxReductionDims, PLEASE
-  maxReductionDims=10,
+  maxReductionDims=5,
   maxCellsPerIdent=200
 ) {
 
@@ -79,7 +79,7 @@ migrateSeuratObject <- function(
 
   dir.create(outdir, recursive = T)
 
-  plotDataForJson <- generatePlotData(object, userAnnotations)
+  plotDataForJson <- generatePlotData(object, userAnnotations, maxReductionDims=maxReductionDims)
   write(toJSON(plotDataForJson), file.path(outdir, PLOT_DATA_FILE_NAME))
   message(sprintf("%s - generated", file.path(outdir, PLOT_DATA_FILE_NAME)))
 

@@ -4,6 +4,8 @@ ALL_REDUCTIONS <- c("FItSNE", "tsne", "umap", "pca")
 #'
 #' @param object SeuratObject
 #' @param userAnnotations list of data.frames with user-defined annotation for cells
+#' @param maxReductionDims maximum number of dimensions for each dim-reduction technique to take.
+#' Mostly used for reducing number of PCs reported in the object.
 #'
 #' @return
 #'
@@ -14,7 +16,7 @@ ALL_REDUCTIONS <- c("FItSNE", "tsne", "umap", "pca")
 #' @import jsonlite
 #'
 #' @examples
-generatePlotData <- function(object, userAnnotations) {
+generatePlotData <- function(object, userAnnotations, maxReductionDims) {
   presentAssays <- Assays(object)
   reductions <- ALL_REDUCTIONS
   reductions <- reductions[reductions %in% names(object@reductions)]
@@ -23,14 +25,14 @@ generatePlotData <- function(object, userAnnotations) {
     stop("No TSNE, UMAP or PCA found, please make sure to run some dimensionality reduction first")
   }
 
-  dataForPlot <- as.data.frame(object@reductions[[reductions[1]]]@cell.embeddings)
+  embeddings <- lapply(reductions, function(red) {
+    emb <- object@reductions[[red]]@cell.embeddings
+    dimMax <- min(ncol(emb), maxReductionDims)
+    reduced <- emb[, 1:dimMax]
+    reduced
+  })
 
-  if (length(reductions) > 1) {
-    for (i in 2:length(reductions)) {
-      dataForPlot <- cbind(dataForPlot,
-                           as.data.frame(object@reductions[[reductions[i]]]@cell.embeddings))
-    }
-  }
+  dataForPlot <- as.data.frame(do.call(cbind, embeddings))
 
   if (length(levels(object$orig.ident)) > 1 || length(unique(object$orig.ident)) > 1) {
     dataForPlot$Sample <- object$orig.ident

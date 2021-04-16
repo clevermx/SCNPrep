@@ -4,12 +4,15 @@
 \alias{generatePlotData}
 \title{Generate data.frame with plot data}
 \usage{
-generatePlotData(object, userAnnotations)
+generatePlotData(object, userAnnotations, maxReductionDims)
 }
 \arguments{
 \item{object}{SeuratObject}
 
 \item{userAnnotations}{list of data.frames with user-defined annotation for cells}
+
+\item{maxReductionDims}{maximum number of dimensions for each dim-reduction technique to take.
+Mostly used for reducing number of PCs reported in the object.}
 }
 \value{
 
