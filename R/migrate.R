@@ -160,4 +160,9 @@ migrateSeuratObject <- function(
     write(toJSON(totalJson, pretty=T), annotationsFile)
     message(sprintf("%s - generated", annotationsFile))
   }
+
+  filesFolder <- file.path(outdir, FILES_FOLDER_NAME)
+  dir.create(filesFolder, showWarnings = F, recursive = T)
+  message(sprintf("Folder %s - generated", filesFolder))
+
 }
