@@ -47,26 +47,9 @@ generatePlotData <- function(object, userAnnotations, maxReductionDims) {
 
   dataForPlot$Cluster <-  Seurat::Idents(object = object)
   metaColumns <- colnames(object@meta.data)
-  umiGeneColumns <- c()
+  dataForPlot <- cbind(dataForPlot, object@meta.data)
 
-  for (assayIter in presentAssays) {
-    umiColumn <- sprintf("nCount_%s", assayIter)
-    geneColumn <- sprintf("nFeature_%s", assayIter)
-    if (umiColumn %in% metaColumns) umiGeneColumns <- c(umiGeneColumns, umiColumn)
-    if (geneColumn %in% metaColumns) umiGeneColumns <- c(umiGeneColumns, geneColumn)
-  }
-
-  for (column in umiGeneColumns) {
-    log2column <- sprintf("%s_log2", column)
-    dataForPlot[, column] <- object@meta.data[, column]
-    dataForPlot[, log2column] <- log2(object@meta.data[, column])
-  }
-
-  clusterColnames <- grep("^(C|c)luster", colnames(dataForPlot), value = T)
-
-  for (clusterColumn in clusterColnames) {
-    dataForPlot[, clusterColumn] <- as.factor(dataForPlot[, clusterColumn])
-  }
+  clusterColnames <- grep("^(C|c)luster|_res", colnames(dataForPlot), value = T)
 
   for (userAnnotation in userAnnotations) {
     dataForPlot <- cbind(dataForPlot, userAnnotation[rownames(dataForPlot), ])
