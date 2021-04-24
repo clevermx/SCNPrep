@@ -49,12 +49,16 @@ generatePlotData <- function(object, userAnnotations, maxReductionDims) {
   metaColumns <- colnames(object@meta.data)
   dataForPlot <- cbind(dataForPlot, object@meta.data)
 
-  clusterColnames <- grep("^(C|c)luster|_res", colnames(dataForPlot), value = T)
-
   for (userAnnotation in userAnnotations) {
     dataForPlot <- cbind(dataForPlot, userAnnotation[rownames(dataForPlot), ])
   }
 
+
+  colnames(dataForPlot) <- sapply(colnames(dataForPlot), function(colName){
+    gsub("\\.", "_", colName)
+  })
+
+  clusterColnames <- grep("^(C|c)luster|_res", colnames(dataForPlot), value = T)
   fields <- list()
 
   for (column in colnames(dataForPlot)) {
