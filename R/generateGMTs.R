@@ -28,13 +28,13 @@ generateGMTs <- function(token, universe, species,
     key <- names(dflist)[i]
     markers <- dflist[[i]]
     clusters <- levels(markers$cluster)
-    for (cluster in clusters) {
+    for (clusterId in clusters) {
 
       goodMarkers <- markers %>%
-        dplyr::filter(p_val_adj < pval & cluster==cluster) %>%
+        dplyr::filter(p_val_adj < pval & cluster==clusterId) %>%
         dplyr::pull(gene)
       goodMarkersEntrez <- convertGeneIdsToEntrez(goodMarkers, idTypeFrom, species)
-      moduleName <- sprintf("%s#%s#%s", token, key, cluster)
+      moduleName <- sprintf("%s#%s#%s", token, key, clusterId)
       gmtLine <- sprintf("%s\t%s\t%s", moduleName, universeName,
                          paste0(goodMarkersEntrez, collapse=","))
       gmts <- c(gmts, gmtLine)
