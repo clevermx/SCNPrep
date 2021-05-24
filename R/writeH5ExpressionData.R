@@ -10,7 +10,7 @@
 #' @import jsonlite
 #'
 #' @examples
-writeH5ExpressionData <- function(counts, newH5File) {
+writeH5ExpressionData <- function(counts, newH5File, compressionLevel=9) {
   asIs <- F
   if (sum(dim(counts)) == 0) {
     stop("Provided slot in provided assay does not exists, cannot generate data.h5")
@@ -33,15 +33,15 @@ writeH5ExpressionData <- function(counts, newH5File) {
   nonZero <- length(counts@x)
 
   h5createDataset(newH5File, "X/indptr", c(genes + 1),
-                  storage.mode = "integer", level=9)
+                  storage.mode = "integer", chunk=c(floor(sqrt(genes))), level=compressionLevel)
   h5write(counts@p, newH5File, "X/indptr")
 
   h5createDataset(newH5File, "X/indices", c(nonZero),
-                  storage.mode = "integer", level=9)
+                  storage.mode = "integer", chunk=c(floor(sqrt(nonZero))), level=compressionLevel)
   h5write(counts@j, newH5File, "X/indices")
 
   h5createDataset(newH5File, "X/data", c(nonZero),
-                  storage.mode = "double", level=9)
+                  storage.mode = "double", chunk=c(floor(sqrt(nonZero))), level=compressionLevel)
   h5write(as.double(counts@x), newH5File, "X/data")
   h5closeAll()
 

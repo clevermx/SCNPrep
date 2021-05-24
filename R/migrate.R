@@ -59,7 +59,8 @@ migrateSeuratObject <- function(
   generateGMTS=public && (!is.null(markers) || generateMarkers),
   ## TODO: implement this maxReductionDims, PLEASE
   maxReductionDims=5,
-  maxCellsPerIdent=200
+  maxCellsPerIdent=200,
+  compressionLevel=9
 ) {
 
   ## Argument checkers
@@ -84,7 +85,7 @@ migrateSeuratObject <- function(
   message(sprintf("%s - generated", file.path(outdir, PLOT_DATA_FILE_NAME)))
 
   counts <- GetAssayData(object, slot=slot, assay=assay)
-  expDataForJson <- writeH5ExpressionData(counts, file.path(outdir, H5_DATASET_FILE_NAME))
+  expDataForJson <- writeH5ExpressionData(counts, file.path(outdir, H5_DATASET_FILE_NAME), compressionLevel=compressionLevel)
   write(toJSON(expDataForJson), file.path(outdir, EXP_DATA_FILE_NAME))
   message(sprintf("%s - generated", file.path(outdir, EXP_DATA_FILE_NAME)))
 
