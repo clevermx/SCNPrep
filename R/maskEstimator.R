@@ -18,8 +18,12 @@ maskEstimator <- function(data, maskField,
                           gridSize=200,
                           threshold=0.0001,
                           dimColumns=c("tSNE_1", "tSNE_2")) {
+
   classes <- get(maskField, data)
-  howMany <- length(unique(classes))
+  occurrences <- table(classes)
+  goodClasses <- names(occurrences[occurrences > 2])
+
+
   z <- MASS::kde2d(data[, dimColumns[1]], data[, dimColumns[2]], n=gridSize,
                    lims = c(range(data[, dimColumns[1]]) * 1.05,
                             range(data[, dimColumns[2]]) * 1.05))
@@ -28,13 +32,13 @@ maskEstimator <- function(data, maskField,
   fullGrid <- expand.grid(gridX, gridY)
 
   # lets estimate two-dimensional kernel density for each cluster
-  allDensities <- lapply(sort(unique(classes)), function(i) {
+  allDensities <- lapply(sort(goodClasses), function(i) {
     subset <- data %>% filter(.data[[maskField]] == i)
     z <- MASS::kde2d(subset[, dimColumns[1]], subset[, dimColumns[2]], n=gridSize, lims = c(range(data[, dimColumns[1]]) * 1.05, range(data[, dimColumns[2]]) * 1.05))
     as.numeric(z$z)
   })
   allDensities <- do.call(cbind, allDensities)
-  colnames(allDensities) <- sort(unique(classes))
+  colnames(allDensities) <- sort(goodClasses)
 
   # for each point in the grid find the cluster with higher probability
   # higher than the threshold
@@ -97,7 +101,7 @@ maskEstimator <- function(data, maskField,
     colnames(shape_x) <- dimColumns
 
     res <- data.table(shape_x)
-    res[, c(maskField) := list(sort(unique(classes))[piece$id[1]])]
+    res[, c(maskField) := list(sort(goodClasses)[piece$id[1]])]
     res[, group := paste0("gr", i, "_", new_order1m)]
     res[]
   }))
