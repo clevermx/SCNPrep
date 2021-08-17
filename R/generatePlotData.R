@@ -50,7 +50,7 @@ generatePlotData <- function(object, userAnnotations, maxReductionDims) {
   dataForPlot <- cbind(dataForPlot, object@meta.data)
 
   for (userAnnotation in userAnnotations) {
-    dataForPlot <- cbind(dataForPlot, userAnnotation[rownames(dataForPlot), ])
+    dataForPlot <- cbind(dataForPlot, userAnnotation[rownames(dataForPlot), ,drop=F])
   }
 
 
