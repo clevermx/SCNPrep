@@ -22,7 +22,8 @@ migrateSeuratObject(
   generateMarkers = F,
   generateGMTS = public && (!is.null(markers) || generateMarkers),
   maxReductionDims = 5,
-  maxCellsPerIdent = 200
+  maxCellsPerIdent = 200,
+  compressionLevel = 9
 )
 }
 \arguments{

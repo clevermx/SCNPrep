@@ -54,9 +54,17 @@ writeH5ExpressionData <- function(counts, newH5File, compressionLevel=9) {
 
   expType <- if (asIs) "as_is" else "counts"
 
+
+  countsCopy <- counts
+  countsCopy@x <- rep(1, length(counts@x))
+  featureCounts <- as.list(rowSums(countsCopy))
+  featureCounts <- lapply(featureCounts, unbox)
+  names(featureCounts) <- rownames(counts)
+
   return(list(
     "expType"=unbox(expType),
     "features"=rownames(counts),
+    "featureCounts"=featureCounts,
     "barcodes"=colnames(counts),
     "totalCounts"=colSums(counts)
   ))

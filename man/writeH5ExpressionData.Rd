@@ -4,7 +4,7 @@
 \alias{writeH5ExpressionData}
 \title{write H5 expression data to a file}
 \usage{
-writeH5ExpressionData(counts, newH5File)
+writeH5ExpressionData(counts, newH5File, compressionLevel = 9)
 }
 \arguments{
 \item{counts}{counts table (will be converted to RsparseMatrix)}
