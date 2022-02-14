@@ -2,9 +2,11 @@
 
 export("%>%")
 export(convertGeneIdsToEntrez)
+export(folderIsConsistent)
 export(guessIdType)
 export(maskEstimator)
 export(migrateSeuratObject)
+export(validateSCDataset)
 import(Matrix)
 import(Seurat)
 import(alphahull)
