@@ -44,6 +44,31 @@ convertOldToNew <- function(path) {
     "totalCounts"=colSums(counts)
   )
 
+  ## rewrite markers if needed
+
+  markersFile <- file.path(path, MARKERS_FILE_NAME)
+  if (file.exists(markersFile)) {
+    markers <- fromJSON(markersFile)
+    newMarkers <- list()
+
+    for (i in 1:length(markers)) {
+      table <- markers[[i]]
+      table$cluster <- as.factor(table$cluster)
+
+      if ("avg_log2FC" %in% names(table)) {
+        j <- which(names(table) == "avg_log2FC")
+        names(table)[j] <- "avg_logFC"
+      }
+
+      newMarkers[[i]] <- table
+    }
+    names(newMarkers) <- names(markers)
+
+    write(toJSON(newMarkers), markersFile)
+    message(sprintf("%s was overwriten", markersFile))
+  }
+
+
   write(toJSON(jsonDataToOverwrite), file.path(path, expDataFileName))
   message(sprintf("%s was overwriten", file.path(path, expDataFileName)))
 }
