@@ -25,6 +25,8 @@ generatePlotData <- function(object, userAnnotations, maxReductionDims) {
     stop("No TSNE, UMAP or PCA found, please make sure to run some dimensionality reduction first")
   }
 
+  dataForPlot <- object@meta.data
+
   embeddings <- lapply(reductions, function(red) {
     emb <- object@reductions[[red]]@cell.embeddings
     dimMax <- min(ncol(emb), maxReductionDims)
@@ -32,22 +34,21 @@ generatePlotData <- function(object, userAnnotations, maxReductionDims) {
     reduced
   })
 
-  dataForPlot <- as.data.frame(do.call(cbind, embeddings))
+  dataForPlot <- cbind(dataForPlot, embeddings)
 
-  if (length(levels(object$orig.ident)) > 1 || length(unique(object$orig.ident)) > 1) {
-    dataForPlot$Sample <- object$orig.ident
-    dataForPlot$Sample <- as.factor(dataForPlot$Sample)
-  } else {
-    samples <- gsub("(\\w+)(_|:)[NATGCx]+", "\\1", colnames(object))
-    if (length(unique(samples)) > 1 && length(unique(samples)) < 100) {
-      dataForPlot$Sample <- as.factor(samples)
+  if (!"Sample" %in% colnames(dataForPlot)) {
+    if (length(levels(object$orig.ident)) > 1 || length(unique(object$orig.ident)) > 1) {
+      dataForPlot$Sample <- object$orig.ident
+      dataForPlot$Sample <- as.factor(dataForPlot$Sample)
+    } else {
+      samples <- gsub("(\\w+)(_|:)[NATGCx]+", "\\1", colnames(object))
+      if (length(unique(samples)) > 1 && length(unique(samples)) < 100) {
+        dataForPlot$Sample <- as.factor(samples)
+      }
     }
   }
 
-
   dataForPlot$Cluster <-  Seurat::Idents(object = object)
-  metaColumns <- colnames(object@meta.data)
-  dataForPlot <- cbind(dataForPlot, object@meta.data)
 
   for (userAnnotation in userAnnotations) {
     dataForPlot <- cbind(dataForPlot, userAnnotation[rownames(dataForPlot), ])
