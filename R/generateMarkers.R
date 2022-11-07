@@ -1,3 +1,5 @@
+OLD_LOGFC_COLNAME <- "avg_logFC"
+NEW_LOGFC_COLNAME <- "avg_log2FC"
 
 #' Generate Markers from Data Frames
 #'
@@ -12,6 +14,15 @@ generateMarkers <- function(dflist, keys) {
   for (i in 1:length(dflist)) {
     key <- keys[i]
     markers <- dflist[[i]]
+
+    colid <- which(colnames(markers) == NEW_LOGFC_COLNAME)
+
+    if (length(colid) == 1) {
+      message(sprintf("Converting the log2FC values to logFC values for table %s", key))
+      colnames(markers)[colid] <- OLD_LOGFC_COLNAME
+      markers[, colid] <- log(2^markers[, colid])
+    }
+
     totalMarkers[[key]] <- markers
   }
   return(totalMarkers)
