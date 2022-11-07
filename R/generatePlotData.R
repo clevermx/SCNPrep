@@ -16,7 +16,11 @@ ALL_REDUCTIONS <- c("FItSNE", "tsne", "umap", "pca")
 #' @import jsonlite
 #'
 #' @examples
-generatePlotData <- function(object, userAnnotations, maxReductionDims) {
+generatePlotData <- function(object,
+                             userAnnotations,
+                             maxReductionDims,
+                             generateCenters=T,
+                             generateMasks=T) {
   presentAssays <- Assays(object)
   reductions <- ALL_REDUCTIONS
   reductions <- reductions[reductions %in% names(object@reductions)]
@@ -84,30 +88,36 @@ generatePlotData <- function(object, userAnnotations, maxReductionDims) {
     for (clusterCol in clusterColnames) {
       dimColnames <- colnames(object@reductions[[reduction]]@cell.embeddings)[1:2]
 
-      centers <- dataForPlot %>%
-        dplyr::group_by(!!dplyr::sym(clusterCol)) %>%
-        dplyr::summarize_at(dimColnames, median)
-      centers <- as.data.frame(centers)
-      centers$Text <- centers[, clusterCol]
-      masks <- maskEstimator(dataForPlot, clusterCol, dimColumns = dimColnames)
 
+      if (generateCenters) {
+        centers <- dataForPlot %>%
+          dplyr::group_by(!!dplyr::sym(clusterCol)) %>%
+          dplyr::summarize_at(dimColnames, median)
+        centers <- as.data.frame(centers)
+        centers$Text <- centers[, clusterCol]
 
-      centersName = sprintf("%s_%s_centers", reduction, clusterCol)
-      bordersName = sprintf("%s_%s_borders", reduction, clusterCol)
+        centersName = sprintf("%s_%s_centers", reduction, clusterCol)
 
-      annotations[[centersName]] <- list(
-        type=unbox("text"),
-        value=unbox(clusterCol),
-        coords=dimColnames,
-        data=centers
-      )
+        annotations[[centersName]] <- list(
+          type=unbox("text"),
+          value=unbox(clusterCol),
+          coords=dimColnames,
+          data=centers
+        )
+      }
 
-      annotations[[bordersName]] <- list(
-        type=unbox("polygon"),
-        value=unbox("group"),
-        coords=dimColnames,
-        data=masks
-      )
+      if (generateMasks) {
+        masks <- maskEstimator(dataForPlot, clusterCol, dimColumns = dimColnames)
+        bordersName = sprintf("%s_%s_borders", reduction, clusterCol)
+
+        annotations[[bordersName]] <- list(
+          type=unbox("polygon"),
+          value=unbox("group"),
+          coords=dimColnames,
+          data=masks
+        )
+      }
+
     }
   }
 

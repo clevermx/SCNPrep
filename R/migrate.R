@@ -54,6 +54,10 @@ migrateSeuratObject <- function(
   curated=F,
   debug=F,
 
+
+  generateCenters=T,
+  generateMasks=T,
+
   markers=NULL,
   generateMarkers=F,
   generateGMTS=public && (!is.null(markers) || generateMarkers),
@@ -80,7 +84,11 @@ migrateSeuratObject <- function(
 
   dir.create(outdir, recursive = T)
 
-  plotDataForJson <- generatePlotData(object, userAnnotations, maxReductionDims=maxReductionDims)
+  plotDataForJson <- generatePlotData(object,
+                                      userAnnotations,
+                                      maxReductionDims=maxReductionDims,
+                                      generateCenters=generateCenters,
+                                      generateMasks=generateMasks)
   write(toJSON(plotDataForJson), file.path(outdir, PLOT_DATA_FILE_NAME))
   message(sprintf("%s - generated", file.path(outdir, PLOT_DATA_FILE_NAME)))
 
