@@ -33,12 +33,15 @@ generateGMTs <- function(token, universe, species,
       goodMarkers <- markers %>%
         dplyr::filter(p_val_adj < pval & cluster==clusterId) %>%
         dplyr::pull(gene)
-      goodMarkersEntrez <- convertGeneIdsToEntrez(goodMarkers, idTypeFrom, species)
-      moduleName <- sprintf("%s#%s#%s", token, key, clusterId)
-      gmtLine <- sprintf("%s\t%s\t%s", moduleName, universeName,
-                         paste0(goodMarkersEntrez, collapse=","))
-      gmts <- c(gmts, gmtLine)
-      names <- c(names, moduleName)
+
+      if (length(goodMarkers) > 0) {
+        goodMarkersEntrez <- convertGeneIdsToEntrez(goodMarkers, idTypeFrom, species)
+        moduleName <- sprintf("%s#%s#%s", token, key, clusterId)
+        gmtLine <- sprintf("%s\t%s\t%s", moduleName, universeName,
+                           paste0(goodMarkersEntrez, collapse=","))
+        gmts <- c(gmts, gmtLine)
+        names <- c(names, moduleName)
+      }
     }
   }
 
