@@ -36,22 +36,24 @@ generatePlotData <- function(object,
     reduced
   })
 
-  dataForPlot <- as.data.frame(do.call(cbind, embeddings))
+  dataForPlot <- object@meta.data
+  dataForPlot <- cbind(dataForPlot, embeddings)
 
-  if (length(levels(object$orig.ident)) > 1 || length(unique(object$orig.ident)) > 1) {
-    dataForPlot$Sample <- object$orig.ident
-    dataForPlot$Sample <- as.factor(dataForPlot$Sample)
-  } else {
-    samples <- gsub("(\\w+)(_|:)[NATGCx]+", "\\1", colnames(object))
-    if (length(unique(samples)) > 1 && length(unique(samples)) < 100) {
-      dataForPlot$Sample <- as.factor(samples)
+  if ("orig.ident" %in% names(attributes(object))) {
+    if (length(levels(object$orig.ident)) > 1 || length(unique(object$orig.ident)) > 1) {
+      dataForPlot$Sample <- object$orig.ident
+      dataForPlot$Sample <- as.factor(dataForPlot$Sample)
+    } else {
+      samples <- gsub("(\\w+)(_|:)[NATGCx]+", "\\1", colnames(object))
+      if (length(unique(samples)) > 1 && length(unique(samples)) < 100) {
+        dataForPlot$Sample <- as.factor(samples)
+      }
     }
   }
 
-
-  dataForPlot$Cluster <-  Seurat::Idents(object = object)
-  metaColumns <- colnames(object@meta.data)
-  dataForPlot <- cbind(dataForPlot, object@meta.data)
+  if (!("Cluster" %in% colnames(dataForPlot))) {
+    dataForPlot$Cluster <-  Seurat::Idents(object = object)
+  }
 
   for (userAnnotation in userAnnotations) {
     dataForPlot <- cbind(dataForPlot, userAnnotation[rownames(dataForPlot), ])
