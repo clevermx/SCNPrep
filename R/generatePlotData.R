@@ -1,5 +1,3 @@
-ALL_REDUCTIONS <- c("FItSNE", "tsne", "umap", "pca")
-
 #' Generate data.frame with plot data
 #'
 #' @param object SeuratObject
@@ -18,8 +16,7 @@ ALL_REDUCTIONS <- c("FItSNE", "tsne", "umap", "pca")
 #' @examples
 generatePlotData <- function(object, userAnnotations, maxReductionDims) {
   presentAssays <- Assays(object)
-  reductions <- ALL_REDUCTIONS
-  reductions <- reductions[reductions %in% names(object@reductions)]
+  reductions <- names(object@reductions)
 
   if (length(reductions) == 0) {
     stop("No TSNE, UMAP or PCA found, please make sure to run some dimensionality reduction first")
