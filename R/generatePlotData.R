@@ -39,7 +39,7 @@ generatePlotData <- function(object,
   dataForPlot <- object@meta.data
   dataForPlot <- cbind(dataForPlot, embeddings)
 
-  if ("orig.ident" %in% names(attributes(object))) {
+  if ("orig.ident" %in% names(object@meta.data)) {
     if (length(levels(object$orig.ident)) > 1 || length(unique(object$orig.ident)) > 1) {
       dataForPlot$Sample <- object$orig.ident
       dataForPlot$Sample <- as.factor(dataForPlot$Sample)
