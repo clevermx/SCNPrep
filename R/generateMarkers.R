@@ -18,7 +18,6 @@ generateMarkers <- function(dflist, keys) {
         message( paste("Converting the cluster column to factor type for table", key))
         markers$cluster <- as.factor(markers$cluster)
     }
-    markers[[1]]$cluster 
     colid <- which(colnames(markers) == NEW_LOGFC_COLNAME)
 
     if (length(colid) == 1) {
