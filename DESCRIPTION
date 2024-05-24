@@ -1,4 +1,4 @@
-Package: SCNPrep
+Package: SCNPrep_scnm
 Type: Package
 Title: Preparing Seurat object for use in scNavigator
 Version: 0.9.10
