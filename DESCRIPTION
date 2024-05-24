@@ -1,9 +1,9 @@
-Package: SCNPrepscnm
+Package: SCNPrepM
 Type: Package
 Title: Preparing Seurat object for use in scNavigator
-Version: 0.9.10
+Version: 0.9.11
 Author: Konstantin Zaitsev <kzaitsev@itmo.ru>
-Maintainer: Konstantin Zaitsev <kzaitsev@itmo.ru>
+Maintainer: Maksim Kleverov <klevermx@gmail.com>
 Description: Utility function for converting scRNA-seq data from Seurat to json files required for scNavigator
 License: What license is it under?
 Encoding: UTF-8
