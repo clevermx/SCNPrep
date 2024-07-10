@@ -82,9 +82,26 @@ maskEstimator <- function(data, maskField,
     }
     piece <- V(g)[gcomp$membership == i]
     zz <- graph_t[name %in% piece$name]
-    zzz <- data.frame(x=gridX[zz$x]+rnorm(nrow(zz), sd = 0.001),
-                      y=gridY[zz$y]+rnorm(nrow(zz), sd = 0.001))
-    shape <- ashape(zzz, alpha=2)
+    shape <- NULL
+    sd_val <- 0.001
+    while( is.null(shape) & sd_val <1000){
+        shape = tryCatch(expr = {
+            print(sd_val)
+            zzz <- data.frame(x=gridX[zz$x]+rnorm(nrow(zz), sd = sd_val),
+                              y=gridY[zz$y]+rnorm(nrow(zz), sd = sd_val))
+            
+            ashape(zzz, alpha=2)
+        },
+        error = function (e){
+            
+            message(paste("Failed to find border for cluster in one of the space, will try to add more noise. I might look worse" ))
+            return(NULL)
+        } )
+        sd_val <- sd_val*10
+    }
+    if (is.null(shape)){
+        stop(paste0("Error: failed to create mask in (", paste(dimColumns, collapse = ","), ") for ", maskField))
+    }
     res <- data.table(shape$edges)[, list(x1, y1, x2, y2)]
     ggt <- data.table(from=paste0("v", shape$edges[, "ind1"]),
                       to=paste0("v", shape$edges[, "ind2"]))
