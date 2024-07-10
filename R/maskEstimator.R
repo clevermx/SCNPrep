@@ -86,7 +86,6 @@ maskEstimator <- function(data, maskField,
     sd_val <- 0.001
     while( is.null(shape) & sd_val <1000){
         shape = tryCatch(expr = {
-            print(sd_val)
             zzz <- data.frame(x=gridX[zz$x]+rnorm(nrow(zz), sd = sd_val),
                               y=gridY[zz$y]+rnorm(nrow(zz), sd = sd_val))
             
