@@ -93,7 +93,7 @@ maskEstimator <- function(data, maskField,
         },
         error = function (e){
             
-            message(paste("Failed to find border for cluster in one of the space, will try to add more noise. I might look worse" ))
+            message(paste("warning: failed to find border for cluster in one of the space, will try to add more noise. It might look worse" ))
             return(NULL)
         } )
         sd_val <- sd_val*10
