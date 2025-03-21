@@ -19,6 +19,7 @@ Imports:
     data.table,
     jsonlite,
     stringi,
-    rhdf5
+    rhdf5,
+    mascarade
 Remotes:
     alserglab/mascarade
