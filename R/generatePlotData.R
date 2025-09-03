@@ -51,9 +51,9 @@ generatePlotData <- function(object,
     }
   }
 
-  if (!("Cluster" %in% colnames(dataForPlot))) {
-    dataForPlot$Cluster <-  Seurat::Idents(object = object)
-  }
+  # if (!("Cluster" %in% colnames(dataForPlot))) {
+  #   dataForPlot$Cluster <-  Seurat::Idents(object = object)
+  # }
 
   for (userAnnotation in userAnnotations) {
     dataForPlot <- cbind(dataForPlot, userAnnotation[rownames(dataForPlot), ])
