@@ -53,7 +53,7 @@ migrateSeuratObject <- function(
   public=F,
   curated=F,
   debug=F,
-
+  defaultPlotPointSize=4,
 
   generateCenters=T,
   generateMasks=T,
@@ -110,7 +110,8 @@ migrateSeuratObject <- function(
     "cells"=unbox(ncol(object)),
     "public"=unbox(public),
     "curated"=unbox(curated),
-    "debug"=unbox(debug)
+    "debug"=unbox(debug),
+    "defaultPlotPointSize"=ubox(defaultPlotPointSize)
   )
   write(toJSON(datasetDescrptor, pretty=T),
         file.path(outdir, DATASET_FILE_NAME))
