@@ -116,7 +116,7 @@ migrateSeuratObject <- function(
     "public"=unbox(public),
     "curated"=unbox(curated),
     "debug"=unbox(debug),
-    "defaultPlotPointSize"=ubox(defaultPlotPointSize)
+    "defaultPlotPointSize"=unbox(defaultPlotPointSize)
   )
   write(toJSON(datasetDescrptor, pretty=T),
         file.path(outdir, DATASET_FILE_NAME))
