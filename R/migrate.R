@@ -92,7 +92,7 @@ migrateSeuratObject <- function(
   write(toJSON(plotDataForJson), file.path(outdir, PLOT_DATA_FILE_NAME))
   message(sprintf("%s - generated", file.path(outdir, PLOT_DATA_FILE_NAME)))
 
-  if (packageVersion("Seurat") >= "5.4"){
+  if (packageVersion("Seurat") >= "5.1"){
     counts <- GetAssayData(object, assay=assay, layer=slot)
   } else {
     counts <- GetAssayData(object, slot=slot, assay=assay)
