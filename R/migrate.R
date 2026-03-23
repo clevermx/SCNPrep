@@ -54,7 +54,7 @@ migrateSeuratObject <- function(
   curated=F,
   debug=F,
 
-
+  defaultPlotPointSize=4,
   generateCenters=T,
   generateMasks=T,
 
@@ -92,7 +92,11 @@ migrateSeuratObject <- function(
   write(toJSON(plotDataForJson), file.path(outdir, PLOT_DATA_FILE_NAME))
   message(sprintf("%s - generated", file.path(outdir, PLOT_DATA_FILE_NAME)))
 
-  counts <- GetAssayData(object, slot=slot, assay=assay)
+  if (packageVersion("Seurat") >= "5.1"){
+      counts <- GetAssayData(object, assay=assay, layer=slot)
+  } else {
+      counts <- GetAssayData(object, slot=slot, assay=assay)
+  }
   expDataForJson <- writeH5ExpressionData(counts, file.path(outdir, H5_DATASET_FILE_NAME), compressionLevel=compressionLevel)
   write(toJSON(expDataForJson), file.path(outdir, EXP_DATA_FILE_NAME))
   message(sprintf("%s - generated", file.path(outdir, EXP_DATA_FILE_NAME)))
@@ -110,7 +114,8 @@ migrateSeuratObject <- function(
     "cells"=unbox(ncol(object)),
     "public"=unbox(public),
     "curated"=unbox(curated),
-    "debug"=unbox(debug)
+    "debug"=unbox(debug),
+    "defaultPlotPointSize"=unbox(defaultPlotPointSize)
   )
   write(toJSON(datasetDescrptor, pretty=T),
         file.path(outdir, DATASET_FILE_NAME))
